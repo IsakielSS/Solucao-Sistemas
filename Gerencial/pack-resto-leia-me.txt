@@ -1,0 +1,11 @@
+Boa tarde.
+
+Devido a alteração dos webservices utilizados pela SEFAZ-CE, que serão definitivos a partir de 01/07/2025, voltaremos a utilizar o arquivo ACBrNFeServicos.ini na pasta raiz do Gerencial. No mesmo está listado e parametrizado os webservices em questão.
+Juntamente com essa alteração, foram liberadas novas versões do RestôDFE, RestôGR, R2 e DFE com suas melhorias.
+
+Segue pacote com .exes e novo ACBrNFeServicos.ini
+
+Por favor, editem o nome do arquivo
+ACBrNFeServicos_NFCE_NFE_20-06-2025.ini
+para
+ACBrNFeServicos.ini
