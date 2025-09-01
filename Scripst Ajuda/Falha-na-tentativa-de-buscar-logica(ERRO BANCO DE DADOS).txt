@@ -1,0 +1,18 @@
+1. Reinicie o SQL Server e Execute Novamente o DBCC
+DBCC CHECKDB (nome_do_banco_de_dados) WITH NO_INFOMSGS, ALL_ERRORMSGS;
+
+2. Tente Realizar o Reparo em Modo de Emergência
+ALTER DATABASE nome_do_banco_de_dados SET EMERGENCY;
+
+
+a) Coloque o banco de dados em modo de emergência:
+ALTER DATABASE nome_do_banco_de_dados SET EMERGENCY;
+
+b) Defina o banco de dados para modo de usuário único:
+ALTER DATABASE nome_do_banco_de_dados SET SINGLE_USER;
+
+c) Execute o DBCC CHECKDB com REPAIR_ALLOW_DATA_LOSS:
+DBCC CHECKDB (nome_do_banco_de_dados, REPAIR_ALLOW_DATA_LOSS);
+
+d) Retorne o banco de dados ao modo multiusuário após o reparo:
+ALTER DATABASE nome_do_banco_de_dados SET MULTI_USER;

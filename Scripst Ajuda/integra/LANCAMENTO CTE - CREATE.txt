@@ -1,0 +1,78 @@
+CREATE TABLE [dbo].[Lancamento_CTe](
+	[LancamentoCTeID] [int] IDENTITY(1,1) NOT NULL,
+	[Inclusao] [datetime] NOT NULL,
+	[Edicao] [datetime] NOT NULL,
+	[Status] [tinyint] NOT NULL,
+	[DataDeEmissao] [datetime] NULL,
+	[DataDeEntradaCTE] [datetime] NULL,
+	[UnidadeID] [tinyint] NOT NULL,
+	[UsuarioID] [int] NULL,
+	[TransportadorID] [int] NULL,
+	[ModeloId] [tinyint] NOT NULL,
+	[ModalidadeID] [tinyint] NOT NULL,
+	[CTEChave] [varchar](50) NULL,
+	[CTESerie] [varchar](10) NULL,
+	[CTESubSerie] [varchar](10) NULL,
+	[CTENumero] [varchar](15) NULL,
+	[ValorDocumento] [money] NULL,
+	[Especie] [tinyint] NULL,
+	[TipoId] [tinyint] NULL,
+	[ValorServico] [money] NULL,
+	[PercentualICMS] [numeric](5, 2) NULL,
+	[ValorBaseICMS] [money] NULL,
+	[ValorICMS] [money] NULL,
+	[ReducaoBaseCalc] [money] NULL,
+	[ModalID] [int] NOT NULL,
+	[OperacaoID] [int] NULL,
+	[FornecedorID] [int] NULL,
+	[ProdutoId] [bigint] NULL,
+	[Observacao] [text] NULL,
+	[CFOPId] [smallint] NULL,
+	[CSTA] [smallint] NULL,
+	[CSTB] [smallint] NULL,
+	[CSOSN] [smallint] NULL,
+	[CSTPIS] [smallint] NULL,
+	[CSTCOFINS] [smallint] NULL,
+	[SituacaoDocumento] [smallint] NULL,
+	[DocumentoProprio] [varchar](1) NULL,
+	[SubstituicaoICMS] [varchar](1) NULL,
+ CONSTRAINT [PK_LancamentoCTe] PRIMARY KEY CLUSTERED 
+(
+	[LancamentoCTeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[Lancamento_CTe]  WITH NOCHECK ADD  CONSTRAINT [FK_LancamentosCTe_Unidades] FOREIGN KEY([UnidadeID])
+REFERENCES [dbo].[Unidades] ([Código])
+GO
+
+ALTER TABLE [dbo].[Lancamento_CTe] CHECK CONSTRAINT [FK_LancamentosCTe_Unidades]
+GO
+
+-------------
+CREATE TABLE [dbo].[Lancamento_CTeNFe](
+	[LancamentoCTeNfeID] [int] IDENTITY(1,1) NOT NULL,
+	[Inclusao] [datetime] NOT NULL,
+	[Edicao] [datetime] NOT NULL,
+	[Status] [tinyint] NOT NULL,
+	[LancamentoCTeID] [int] NOT NULL,
+	[LancamentoID] [int] NOT NULL,
+ CONSTRAINT [PK_LancamentoCTeNfe] PRIMARY KEY CLUSTERED 
+(
+	[LancamentoCTeNfeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[Lancamento_CTeNFe]  WITH CHECK ADD  CONSTRAINT [FK_LancamentoCTe] FOREIGN KEY([LancamentoCTeID])
+REFERENCES [dbo].[Lancamento_CTe] ([LancamentoCTeID])
+GO
+
+ALTER TABLE [dbo].[Lancamento_CTeNFe] CHECK CONSTRAINT [FK_LancamentoCTe]
+GO

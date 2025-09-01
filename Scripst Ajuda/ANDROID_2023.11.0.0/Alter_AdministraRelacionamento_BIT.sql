@@ -1,0 +1,1 @@
+Alter table fornecedores alter column AdministraRelacionamento bit

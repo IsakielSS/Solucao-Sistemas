@@ -1,0 +1,87 @@
+Apos analise foi verificado que sistema com versao 2023 estava
+calcudado comissão de dividindo pela quantidade de garcon dos pedidos
+exempo:
+total da mesa: 100 reais
+vendedor A lançou 60
+vendedor B lançou 40
+10% comissão: total de 10 reais
+
+vendedores ficam com  informação errada:
+A = 5,00
+B = 5,00
+
+correto seria:
+A = 6,00
+B = 4,00
+-------------------------------------------------------------------------------
+
+select para verificar divergencia da comissão?:
+SELECT
+  P.VendedorID,
+  P.LancamentoID,
+  MAX(P.VendedorComissao) AS VendedorComissao,
+  SUM(R.PrecoTotal) AS PrecoTotal,
+  SUM(P.VendedorComissaoValor) AS ComissaoValor,
+  ROUND(SUM(PrecoTotal * 0.10), 2, 1) AS ComissaoAjustada,
+  CASE 
+    WHEN SUM(R.PrecoTotal) > 0 THEN ROUND((SUM(P.VendedorComissaoValor) / SUM(R.PrecoTotal) * 100), 2)
+    ELSE 0
+  END AS PercentualComissao
+FROM
+  vwLancamentos L
+  JOIN vwPedidos P ON L.LancamentoID = P.LancamentoID
+  CROSS APPLY (
+    SELECT SUM(R.PrecoTotal) AS PrecoTotal
+    FROM vwPedidosProdutos R
+    WHERE
+      R.PedidoID = P.PedidoID AND
+      R.SubItem = 0 AND
+      R.Qde <> 0 AND
+      R.Fator <> 0 AND
+      ISNULL(R.Taxa, 0) = 0 AND 
+      P.VendedorID = 315
+  ) R
+WHERE
+  L.Emissao BETWEEN CONVERT(DATETIME, '2024-11-04', 121) AND CONVERT(DATETIME, '2024-11-04 23:59:59.997', 121) AND
+  P.Natureza = -1
+GROUP BY
+  P.VendedorID,
+  P.LancamentoID, 
+  L.Status, 
+  L.Abatimento, 
+  L.AbatimentoPercentual
+HAVING SUM(R.PrecoTotal) > 0;
+
+
+--------------------------------------------------------------------------
+UPDATE PARA CORRIGIR PROBLEMA:
+UPDATE P
+SET P.VendedorComissaoValor = CA.ComissaoAjustada
+FROM vwPedidos P
+JOIN vwLancamentos L ON L.LancamentoID = P.LancamentoID
+CROSS APPLY (
+    SELECT ROUND(SUM(R.PrecoTotal * 0.10), 2, 1) AS ComissaoAjustada
+    FROM vwPedidosProdutos R
+    WHERE
+      R.PedidoID = P.PedidoID AND
+      R.SubItem = 0 AND
+      R.Qde <> 0 AND
+      R.Fator <> 0 AND
+      ISNULL(R.Taxa, 0) = 0 AND 
+      P.VendedorID = 315
+) CA
+WHERE
+  L.Emissao BETWEEN CONVERT(DATETIME, '2024-11-04', 121) AND CONVERT(DATETIME, '2024-11-04 23:59:59.997', 121) AND
+  P.Natureza = -1 AND
+  EXISTS (
+    SELECT 1 
+    FROM vwPedidosProdutos R 
+    WHERE 
+      R.PedidoID = P.PedidoID AND 
+      R.SubItem = 0 AND 
+      R.Qde <> 0 AND 
+      R.Fator <> 0 AND 
+      ISNULL(R.Taxa, 0) = 0 AND 
+      P.VendedorID = 315
+);
+
