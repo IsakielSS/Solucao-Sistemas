@@ -1,0 +1,2 @@
+
+ALTER TABLE DocumentosFiscaisAcobertamento ADD TipoConsumidor SMALLINT NULL

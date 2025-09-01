@@ -1,0 +1,1 @@
+ALTER TABLE Pedidos_Produtos Alter Column DescontoTipo SMALLINT

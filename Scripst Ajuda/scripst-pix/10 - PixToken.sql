@@ -1,0 +1,1 @@
+alter table unidades add PixToken varchar(255) null
